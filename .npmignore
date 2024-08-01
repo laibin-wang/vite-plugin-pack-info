@@ -1,0 +1,7 @@
+src/**
+tests/**
+.github
+tsconfig.cjs.json
+tsconfig.esm.json
+tsconfig.json
+pnpm-lock.yaml
