@@ -38,9 +38,22 @@ jobs:
         run: pnpm run build
 
       - name: Publish to npm
+        run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npm publish --access public
+
+
+#  - run: npm run build
+#       - run: |
+#           VERSION=$(node -p "require('./package.json').version")
+#           cd dist
+#           if [[ "$VERSION" == *"beta"* ]]; then
+#             npm publish --tag=beta-v2
+#           else
+#             npm publish
+#           fi
+#         env:
+#           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 # jobs:
 #   build:
 #     runs-on: ubuntu-latest
