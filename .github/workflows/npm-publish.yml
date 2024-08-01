@@ -25,14 +25,17 @@ jobs:
           node-version: 20
           registry-url: https://registry.npmjs.org/
 
+      - name: 安装 pnpm
+        run: npm install -g pnpm
+
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install
 
       - name: Test package
-        run: npm run test
+        run: pnpm run test
 
       - name: Build package
-        run: npm run build
+        run: pnpm run build
 
       - name: Publish to npm
         env:
