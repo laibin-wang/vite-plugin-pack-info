@@ -4,13 +4,14 @@ import path from 'node:path'
 import {execSync } from 'node:child_process'
 
 export interface infoOptions {
-  name: string;
-  barnch: string;
-  commitAuthor: string;
-  commitTime: string;
-  commitId: string;
-  commitMsg: string;
-  buildTime: string;
+  name?: string;
+  barnch?: string;
+  commitAuthor?: string;
+  commitTime?: string;
+  commitId?: string;
+  commitMsg?: string;
+  buildTime?: string;
+  version: string | number;
 }
 
 export interface Options {
@@ -47,7 +48,7 @@ export default function infoPack(options?: Options): PluginOption {
   const inDir = options?.inDir || 'dist'
   const outDir = options?.outDir || 'dist'
   const outFileName = options?.outFileName || 'robin.json'
-  const version = options?.version || 'robin.json'
+  const version = options?.version || Date.now()
   const done = options?.done || function (){}
 
   function _isGit(): boolean {
@@ -102,7 +103,7 @@ export default function infoPack(options?: Options): PluginOption {
     const buildTime = _formatDate(now)
     const commitTime = dateArr.join(' ')
 
-    return { name, barnch, commitAuthor, commitTime, commitId, commitMsg, buildTime }
+    return { name, barnch, commitAuthor, commitTime, commitId, commitMsg, buildTime, version: version }
   }
   async function _createPackInfo(packInfo: infoOptions): Promise<void> {
     const fileName = path.join(outDir, outFileName)
@@ -134,13 +135,7 @@ export default function infoPack(options?: Options): PluginOption {
           }
 
           let packInfo:infoOptions = {
-            name: '',
-            barnch: '',
-            commitAuthor: '',
-            commitTime: '',
-            commitId: '',
-            commitMsg: '',
-            buildTime: ''
+            version: version
           }
           // 检测当前是不是git 环境
           if (!_isGit()) {
@@ -150,7 +145,7 @@ export default function infoPack(options?: Options): PluginOption {
             packInfo = await _getGitInfo()
           }
 
-          console.log('\x1b[32m%s\x1b[0m', '  - Creating info file.')
+          console.log('\x1b[32m%s\x1b[0m', `  - Creating info file(${outFileName}).`)
           await _createPackInfo(packInfo)
 
           console.log('\x1b[32m%s\x1b[0m', '  - Done.')
